@@ -1,18 +1,21 @@
 import React from "react";
+import { useParams } from 'react-router-dom';
 
 import UserCard from './Card';
 import { myStore } from './Employees';
 
 function User(){
+    const {userId} = useParams();
+    //document.write(userId);
     return(
         <>
             <UserCard
-                name={myStore.initialList[0].name}
-                birthday={myStore.initialList[0].birthday}
-                phone={myStore.initialList[0].phone}
-                email={myStore.initialList[0].email}
-                days={myStore.initialList[0].days}
-                wage={myStore.initialList[0].wage}
+                name={myStore.initialList[{userId}].name}
+                birthday={myStore.initialList[userId].birthday}
+                phone={myStore.initialList[userId].phone}
+                email={myStore.initialList[userId].email}
+                days={myStore.initialList[userId].days}
+                wage={myStore.initialList[userId].wage}
             />
         </>
     );

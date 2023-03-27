@@ -6,11 +6,11 @@ import { myStore } from './Employees';
 
 function User(){
     const {userId} = useParams();
-    //document.write(userId);
+    console.log(userId);
     return(
         <>
             <UserCard
-                name={myStore.initialList[{userId}].name}
+                name={myStore.initialList[userId].name}
                 birthday={myStore.initialList[userId].birthday}
                 phone={myStore.initialList[userId].phone}
                 email={myStore.initialList[userId].email}

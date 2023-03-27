@@ -10,7 +10,7 @@ function App(){
       <>
         <header>
           <Link to="/about">Список работников</Link>
-            <Link to="/user">Профиль</Link>
+            <Link to="/user/0">Профиль</Link>
         </header>
         <Routes>
           <Route path="/about" element={<Employees />} />

@@ -31,7 +31,7 @@ function User(){
     const [phoneError, setPhoneError] = useState('Укажите телефон!');
     const [emailError, setEmailError] = useState('Почта не может быть пустой.');
     const [daysError, setDaysError] = useState('Работник должен отрабатывать хотя бы 1 день!');
-    const [wageError, setWageError] = useState('Ставка должна соответсовать МРОТ!');
+    const [wageError, setWageError] = useState('Ставка должна соответствовать МРОТ!');
 
     useEffect(() =>{
         if (nameError || birthdayError || phoneError || emailError || daysError || wageError){

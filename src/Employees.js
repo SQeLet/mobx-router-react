@@ -3,8 +3,9 @@ import { useState } from 'react';
 import {observable} from 'mobx';
 import {render} from "react-dom";
 import {Link} from "react-router-dom";
-import { Button } from 'react-bootstrap';
+import {Button, Container} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Table from 'react-bootstrap/Table';
 
 
 let nextId = 0;
@@ -60,7 +61,6 @@ let App = function List() {
     const [email, setEmail] = useState('');
     const [days, setDays] = useState('');
     const [wage, setWage] = useState('');
-    //const [employees, setEmployees] = useState([myStore.initialList]);
 
     const [nameDirty, setNameDirty] = useState(false);
     const [birthdayDirty, setBirthdayDirty] = useState(false);
@@ -69,7 +69,6 @@ let App = function List() {
     const [daysDirty, setDaysDirty] = useState(false);
     const [wageDirty, setWageDirty] = useState(false);
     const [inputValid, setInputValid] = useState(false);
-    //const [employeesDirty, setEmployeesDirty] = useState(false);
 
     const [nameError, setNameError] = useState('Имя не может быть пустым.');
     const [birthdayError, setBirthdayError] = useState('Укажите дату рождения!');
@@ -194,11 +193,9 @@ let App = function List() {
         </tr>
     });
     return (
-        <>
-            <head>
-
-            </head>
-            <table border="1px">
+        <div style={{ textAlign: 'center' }}>
+            <Container style={{ width: '80%'}}>
+            <Table striped bordered hover size={"sm"}>
                 <thead>
                 <tr>
                     <td>Имя</td>
@@ -256,8 +253,8 @@ let App = function List() {
                 <tbody>
                 {res}
                 </tbody>
-            </table>
-
+            </Table>
+            </Container>
             <h1>Добавить работника:</h1>
             <Button disabled={!inputValid} as={"input"} type={"submit"} value={"Добавить"} variant={"success"} onClick={() => {
                 myStore.initialList.push({
@@ -277,7 +274,7 @@ let App = function List() {
                 setDays('');
                 setWage('');
             }} />
-        </>
+        </div>
     );
 }
 

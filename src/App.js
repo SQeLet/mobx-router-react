@@ -8,8 +8,9 @@ import User from './User';
 function App(){
   return (
       <>
-        <header>
+        <header style={{ textAlign: 'center' }}>
           <Link to="/about">Список работников</Link>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <Link to="/user/0">Профиль</Link>
         </header>
         <Routes>

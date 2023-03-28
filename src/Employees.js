@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React, {Component, useEffect} from 'react';
 import { useState } from 'react';
 import {observable} from 'mobx';
 import {render} from "react-dom";
 import {Link} from "react-router-dom";
+import { Button } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 let nextId = 0;
@@ -66,6 +68,7 @@ let App = function List() {
     const [emailDirty, setEmailDirty] = useState(false);
     const [daysDirty, setDaysDirty] = useState(false);
     const [wageDirty, setWageDirty] = useState(false);
+    const [inputValid, setInputValid] = useState(false);
     //const [employeesDirty, setEmployeesDirty] = useState(false);
 
     const [nameError, setNameError] = useState('Имя не может быть пустым.');
@@ -74,6 +77,15 @@ let App = function List() {
     const [emailError, setEmailError] = useState('Почта не может быть пустой.');
     const [daysError, setDaysError] = useState('Работник должен отрабатывать хотя бы 1 день!');
     const [wageError, setWageError] = useState('Ставка должна соответсовать МРОТ!');
+
+    useEffect(() =>{
+            if (nameError || birthdayError || phoneError || emailError || daysError || wageError){
+                setInputValid(false);
+            }
+            else {
+                setInputValid(true);
+            }
+        }, [nameError, birthdayError, phoneError, emailError, daysError, wageError]);
 
     const nameHandler = (e) => {
         setName(e.target.value);
@@ -88,12 +100,24 @@ let App = function List() {
 
     const birthdayHandler = (e) => {
         setBirthday(e.target.value);
-        //обработка д.р.
+        const re = /^\d{4}-\d{2}-\d{2}$/;
+        if (!re.test(String(e.target.value))){
+            setBirthdayError('Введите дату рождения!');
+        }
+        else{
+            setBirthdayError('');
+        }
     }
 
     const phoneHandler = (e) => {
         setPhone(e.target.value);
         const re = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
+        if (!re.test(String(e.target.value))){
+            setPhoneError('Некорректный номер телефона');
+        }
+        else{
+            setPhoneError('');
+        }
     }
 
     const emailHandler = (e) => {
@@ -106,6 +130,30 @@ let App = function List() {
             setEmailError('');
         }
     }
+
+    const daysHandler = (e) => {
+        setDays(e.target.value);
+        const re = /^(3[01]|[12]\d|[1-9])$/;
+        if (!re.test(String(e.target.value).toLowerCase())){
+            setDaysError('Количество дней может быть от 1 до 31.');
+        }
+        else{
+            setDaysError('');
+        }
+    }
+
+    const wageHandler = (e) => {
+        setWage(e.target.value);
+        const val = e.target.value;
+        if(val > 0){
+            setWageError('');
+        }
+        else{
+            setWageError('Ставка должна быть больше 0!');
+        }
+    }
+
+
 
     const blurHandler = (e) => {
         switch (e.target.name){
@@ -147,6 +195,9 @@ let App = function List() {
     });
     return (
         <>
+            <head>
+
+            </head>
             <table border="1px">
                 <thead>
                 <tr>
@@ -168,15 +219,17 @@ let App = function List() {
                     <td>
                         {(birthdayDirty && birthdayError) && <div style={{color:'red'}}>{birthdayError}</div>}
                         <input type={"date"} name={"birthday"}
+                               onChange={e => birthdayHandler(e)}
                                onBlur={e => blurHandler(e)}
                         value={birthday}
-                        onChange={e => setBirthday(e.target.value)} /></td>
+                        onSubmit={e => setBirthday(e.target.value)} /></td>
                     <td>
                         {(phoneDirty && phoneError) && <div style={{color:'red'}}>{phoneError}</div>}
                         <input type={"tel"} name={"phone"}
+                               onChange={e => phoneHandler(e)}
                                onBlur={e => blurHandler(e)}
                         value={phone}
-                        onChange={e => setPhone(e.target.value)} /></td>
+                        onSubmit={e => setPhone(e.target.value)} /></td>
                     <td>
                         {(emailDirty && emailError) && <div style={{color:'red'}}>{emailError}</div>}
                         <input type={"email"} name={"email"}
@@ -187,15 +240,17 @@ let App = function List() {
                     <td>
                         {(daysDirty && daysError) && <div style={{color:'red'}}>{daysError}</div>}
                         <input type={"text"} name={"days"}
+                               onChange={e => daysHandler(e)}
                                onBlur={e => blurHandler(e)}
                         value={days}
-                        onChange={e => setDays(e.target.value)} /></td>
+                        onSubmit={e => setDays(e.target.value)} /></td>
                     <td>
                         {(wageDirty && wageError) && <div style={{color:'red'}}>{wageError}</div>}
                         <input type={"text"} name={"wage"}
+                               onChange={e => wageHandler(e)}
                                onBlur={e => blurHandler(e)}
                         value={wage}
-                        onChange={e => setWage(e.target.value)} /></td>
+                        onSubmit={e => setWage(e.target.value)} /></td>
                 </tr>
                 </thead>
                 <tbody>
@@ -204,7 +259,7 @@ let App = function List() {
             </table>
 
             <h1>Добавить работника:</h1>
-            <input type={"submit"} onClick={() => {
+            <Button disabled={!inputValid} as={"input"} type={"submit"} value={"Добавить"} variant={"success"} onClick={() => {
                 myStore.initialList.push({
                     id: nextId++,
                     name: name,
